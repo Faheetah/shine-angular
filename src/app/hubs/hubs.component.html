@@ -1,0 +1,9 @@
+<div class="col-md-6 col-md-offset-3">
+  <h2>Select a hub to connect</h2>
+  <p>Be sure to press the hub button first</p>
+  <div *ngFor="let hub of hubs">
+    <p>
+      <button (click)="login($event)" class="btn btn-primary">{{ hub.internalipaddress }}</button>
+    </p>
+  </div>
+</div>
