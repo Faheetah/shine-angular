@@ -9,6 +9,7 @@ import { AuthService } from '../auth.service';
 })
 
 export class HubsComponent implements OnInit {
+  loading: boolean = false;
   returnUrl: string;
   hubs: {"id": string, "internalipaddress": string}[]
 
@@ -19,13 +20,16 @@ export class HubsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.loading = true;
     this.authService.getUpnpHubs()
       .subscribe(
         data => {
           this.hubs = data.json();
+          this.loading = false;
         },
         error => {
           console.log(error);
+          this.loading = false;
         }
       ) 
     this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
