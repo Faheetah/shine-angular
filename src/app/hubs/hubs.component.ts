@@ -22,7 +22,6 @@ export class HubsComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.alertService.warning("Be sure to press the hub button first", true)
     this.authService.getUpnpHubs()
       .subscribe(
         data => {
