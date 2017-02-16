@@ -2,7 +2,7 @@ stage('build') {
     node {
         checkout scm
         sh 'npm install'
-        sh 'ng build'
+        sh 'npm run ng build'
         archive 'dist/**'
     }
 }
