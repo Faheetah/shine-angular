@@ -1,13 +1,22 @@
-<div class="col-md-6 col-md-offset-3">
+<div class="col-md-6">
   <h2>Select a hub to connect</h2>
-  <p>Be sure to press the hub button first</p>
-  <div *ngFor="let hub of hubs">
-    <p>
-      <button (click)="login($event.srcElement.innerText, $event.srcElement.id)" [id]="hub.id" class="btn btn-primary">{{ hub.internalipaddress }}</button>
-    </p>
+  <ngb-alert>Be sure to press the hub button first</ngb-alert>
+</div>
+
+<div class="col-md-6">
+  <div *ngIf="loading">Loading hubs...</div>
+
+  <div *ngIf="!loading">
+    <div class="input-group form-group">
+      <label class="input-group-addon" for="ip">Manual IP</label>
+      <input class="form-control" id="ip" type="text" #manualIP /> 
+      <button (click)="login('manual', manualIP.value)" class="input-group-addon btn btn-primary" style="background-color: #0275d8; border-color: #0275d8; color: white;">Go</button>
+    </div>
+
+    <div *ngFor="let hub of hubs" class="form-group">
+      <p>
+        <button (click)="login($event.srcElement.id, $event.srcElement.innerText)" [id]="hub.id" class="btn btn-primary">{{ hub.internalipaddress }}</button>
+      </p>
+    </div>
   </div>
-  <p>
-    <label>Manual IP</label><input type="text" #manualIP />
-    <button (click)="login('manual', manualIP.value)" class=btn btn-primary>Go</button>
-  </p>
 </div>
