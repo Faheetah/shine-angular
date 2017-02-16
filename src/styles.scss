@@ -2,11 +2,14 @@
 
 @import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
+.btn {
+    cursor: pointer;
+}
+
 .btn-primary {
     color: white !important;
     background-color: #0275d8 !important;
     border-color: #0275d8 !important;
-    cursor: pointer;
 }
 
 .btn-primary:hover {

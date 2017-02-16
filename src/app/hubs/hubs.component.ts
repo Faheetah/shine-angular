@@ -49,4 +49,8 @@ export class HubsComponent implements OnInit {
         }
       )
   }
+
+  logout(id) {
+    this.authService.logout(id);
+  }
 }
