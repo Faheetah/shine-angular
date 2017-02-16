@@ -1,11 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http'
+import { Http, Response } from '@angular/http';
+import { Router, ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/map';
+
+import { AlertService } from './alert.service';
 
 @Injectable()
 export class AuthService {
   id: string;
-  constructor(private http: Http) { }
+  constructor(
+    private http: Http,
+    private router: Router,
+    private alertService: AlertService
+  ) {
+    let id = localStorage.getItem('id');
+    if(id != undefined && localStorage.getItem(id) != undefined) {
+      this.id = id;
+    }
+  }
 
   login(id, hub) {
     let json = JSON.stringify({"devicetype": "shine#web"});
@@ -25,6 +37,7 @@ export class AuthService {
         if("success" in resp) {
           let user = resp.success.username;
           localStorage.setItem(id, `http://${hub}/api/${user}`);
+          localStorage.setItem('id', id)
           this.id = id;
           return this.getEndpoint();
         }
@@ -32,6 +45,11 @@ export class AuthService {
         throw new Error(`Could not parse response from server: ${resp.stringify}`);
       }
     );
+  }
+
+  logout(id) {
+    localStorage.removeItem(id);
+    delete this.id;
   }
 
   getUpnpHubs() {
@@ -44,13 +62,18 @@ export class AuthService {
   }
 
   getEndpoint() {
-    return localStorage.getItem(this.id);
+    let endpoint = localStorage.getItem(this.id);
+    if(endpoint) {
+      return endpoint;
+    }
+    this.id = null;
+    this.router.navigate(['/hubs']);
   }
 
-  isLoggedIn() {
-    if(localStorage.getItem(this.id)) {
-      return true
+  isConnected() {
+    if(this.id === undefined) {
+      return false
     }
-    return false
+    return true
   }
 }

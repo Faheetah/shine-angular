@@ -3,6 +3,10 @@
   <ngb-alert [dismissible]="false" class="text-center">Be sure to press the hub button first</ngb-alert>
 </div>
 
+<div class="col-md-6" *ngIf='authService.id != undefined'>
+  <p><a (click)="logout(authService.id)" class="btn btn-danger">Disconnect from {{ authService.id }}</a> 
+</div>
+
 <div class="col-md-6">
   <div *ngIf="loading">Loading hubs...</div>
 
