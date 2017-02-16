@@ -1,6 +1,6 @@
 <div class="col-md-6">
   <h2>Select a hub to connect</h2>
-  <ngb-alert>Be sure to press the hub button first</ngb-alert>
+  <!--<ngb-alert>Be sure to press the hub button first</ngb-alert>-->
 </div>
 
 <div class="col-md-6">
@@ -15,7 +15,7 @@
 
     <div *ngFor="let hub of hubs" class="form-group">
       <p>
-        <button (click)="login($event.srcElement.id, $event.srcElement.innerText)" [id]="hub.id" class="btn btn-primary">{{ hub.internalipaddress }}</button>
+        <button (click)="login(hub.id, hub.internalipaddress)" [id]="hub.id" class="btn btn-primary">{{ hub.internalipaddress }}</button>
       </p>
     </div>
   </div>
