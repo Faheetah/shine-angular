@@ -12,13 +12,15 @@ import { HubsComponent } from './hubs/hubs.component';
 import { AuthService } from './auth.service';
 import { AlertService } from './alert.service';
 import { AlertComponent } from './alert/alert.component';
+import { LightsComponent } from './lights/lights.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AlertComponent,
     HomeComponent,
-    HubsComponent
+    HubsComponent,
+    LightsComponent
   ],
   imports: [
     BrowserModule,
