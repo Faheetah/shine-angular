@@ -3,7 +3,11 @@
   <p>Be sure to press the hub button first</p>
   <div *ngFor="let hub of hubs">
     <p>
-      <button (click)="login($event)" class="btn btn-primary">{{ hub.internalipaddress }}</button>
+      <button (click)="login($event.srcElement.innerText, $event.srcElement.id)" [id]="hub.id" class="btn btn-primary">{{ hub.internalipaddress }}</button>
     </p>
   </div>
+  <p>
+    <label>Manual IP</label><input type="text" #manualIP />
+    <button (click)="login('manual', manualIP.value)" class=btn btn-primary>Go</button>
+  </p>
 </div>

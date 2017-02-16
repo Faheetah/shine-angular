@@ -9,7 +9,6 @@ import { AuthService } from '../auth.service';
 })
 
 export class HubsComponent implements OnInit {
-  @Input() hub: string;
   returnUrl: string;
   hubs: {"id": string, "internalipaddress": string}[]
 
@@ -20,13 +19,20 @@ export class HubsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.hubs = this.authService.getUpnpHubs();
+    this.authService.getUpnpHubs()
+      .subscribe(
+        data => {
+          this.hubs = data.json();
+        },
+        error => {
+          console.log(error);
+        }
+      ) 
     this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
   }
 
-  login(event) {
-    let hub = event.srcElement.innerText;
-    this.authService.login(hub)
+  login(id, hub) {
+    this.authService.login(id, hub)
       .subscribe(
         data => {
           this.router.navigate([this.returnUrl]);
@@ -36,5 +42,4 @@ export class HubsComponent implements OnInit {
         }
       )
   }
-
 }
