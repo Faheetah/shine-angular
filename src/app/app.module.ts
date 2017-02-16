@@ -10,10 +10,13 @@ import { HomeComponent } from './home/home.component';
 import { HubsComponent } from './hubs/hubs.component';
 
 import { AuthService } from './auth.service';
+import { AlertService } from './alert.service';
+import { AlertComponent } from './alert/alert.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AlertComponent,
     HomeComponent,
     HubsComponent
   ],
@@ -24,6 +27,7 @@ import { AuthService } from './auth.service';
     NgbModule.forRoot()
   ],
   providers: [
+    AlertService,
     AuthService
   ],
   bootstrap: [AppComponent]

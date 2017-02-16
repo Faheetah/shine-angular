@@ -13,7 +13,7 @@ export class AuthService {
       .map((response: Response) => {
         let current = localStorage.getItem(id);
 
-        if(this.id != undefined) {
+        if(this.id === id && this.id != undefined) {
           return this.getEndpoint();
         }
 
@@ -29,7 +29,6 @@ export class AuthService {
           return this.getEndpoint();
         }
 
-        console.log(resp);
         throw new Error(`Could not parse response from server: ${resp.stringify}`);
       }
     );

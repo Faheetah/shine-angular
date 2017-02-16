@@ -1,0 +1,5 @@
+<div *ngFor='let alert of alerts'>
+  <ngb-alert (close)="close(alert)" [type]="alert.type">
+    {{ alert.message }}
+  </ngb-alert>
+</div>
