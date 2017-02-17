@@ -5,12 +5,12 @@ import { AuthService } from '../auth.service';
 import { AlertService } from '../alert.service';
 
 @Component({
-  templateUrl: './lights.component.html'
+  templateUrl: './schedules.component.html',
 })
 
-export class LightsComponent implements OnInit {
+export class SchedulesComponent implements OnInit {
   private endpoint: string;
-  private lights: any;
+  private schedules: any;
 
   constructor(
     private http: Http,
@@ -21,18 +21,17 @@ export class LightsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.http.get(this.endpoint + '/lights')
+    this.http.get(this.endpoint + '/schedules')
       .map((response: Response) => {
         return response.json()
       })
       .subscribe(
-      data => {
-        this.lights = data;
-      },
-      error => { this.alertService.danger(error) }
-    )
+        data => {
+          this.schedules = Object.keys(data)
+            .map(k => { return {key: k, value: data[k]} })
+        },
+        error => { this.alertService.danger(error) }
+      )
   }
-
-
 
 }

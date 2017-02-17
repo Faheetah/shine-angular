@@ -1,0 +1,7 @@
+<div *ngFor="let room of rooms|keys">
+  <h3>{{ room.value.name }}</h3>
+  id : {{ room.key }}
+  <div *ngFor="let r of room.value|keys">
+    {{ r.key }} : {{ r.value }}
+  </div>
+</div>
