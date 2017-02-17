@@ -13,6 +13,9 @@ import { AuthService } from './auth.service';
 import { AlertService } from './alert.service';
 import { AlertComponent } from './alert/alert.component';
 import { LightsComponent } from './lights/lights.component';
+import { RoomsComponent } from './rooms/rooms.component';
+import { SchedulesComponent } from './schedules/schedules.component';
+import { KeysPipe } from './keys.pipe';
 
 @NgModule({
   declarations: [
@@ -20,7 +23,10 @@ import { LightsComponent } from './lights/lights.component';
     AlertComponent,
     HomeComponent,
     HubsComponent,
-    LightsComponent
+    LightsComponent,
+    RoomsComponent,
+    SchedulesComponent,
+    KeysPipe
   ],
   imports: [
     BrowserModule,

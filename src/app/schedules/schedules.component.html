@@ -1,0 +1,7 @@
+<div *ngFor="let schedule of schedules">
+  <h3>{{ schedule.value.name }}</h3>
+  id : {{ schedule.key }}
+  <div *ngFor="let item of schedule.value|keys">
+    {{ item.key }} : {{ item.value }}
+  </div>
+</div>
