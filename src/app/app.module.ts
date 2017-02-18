@@ -14,6 +14,7 @@ import { AlertService } from './alert.service';
 import { AlertComponent } from './alert/alert.component';
 import { LightsComponent } from './lights/lights.component';
 import { RoomsComponent } from './rooms/rooms.component';
+import { ScenesComponent } from './scenes/scenes.component';
 import { SchedulesComponent } from './schedules/schedules.component';
 import { KeysPipe } from './keys.pipe';
 
@@ -25,6 +26,7 @@ import { KeysPipe } from './keys.pipe';
     HubsComponent,
     LightsComponent,
     RoomsComponent,
+    ScenesComponent,
     SchedulesComponent,
     KeysPipe
   ],
