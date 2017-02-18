@@ -1,0 +1,6 @@
+<div *ngFor="let scene of scenes|keys">
+  <h3>{{ scene.value.name }}</h3>
+  <div *ngFor="let s of scene.value|keys">
+    {{ s.key }} : {{ s.value }}
+  </div>
+</div>
