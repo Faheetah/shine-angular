@@ -3,6 +3,6 @@ stage('build') {
         checkout scm
         sh 'npm install'
         sh 'npm run ng build'
-        sh 'mv dist/* /srv/shine/'
+        sh 'mv dist /srv/shine/${BRANCH_NAME}'
     }
 }
