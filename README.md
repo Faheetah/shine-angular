@@ -1,6 +1,6 @@
 [![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.sudovim.com/job/faheetah/job/shine/job/master.svg)](http://jenkins.sudovim.com/job/faheetah/job/shine/job/master/)
 
-# Shine
+# Shine (name change pending, existing app)
 
 A serverless Hue frontend in AngularJS and Bootstrap.
 
