@@ -1,6 +1,5 @@
 <div *ngFor="let light of lights|keys">
-  <h3>{{ light.value.name }}</h3>
-  id : {{ light.key }}
+  <h3><a [routerLink]="light.key">{{ light.value.name }}</a></h3>
   <div *ngFor="let l of light.value|keys">
     {{ l.key }} : {{ l.value }}
   </div>

@@ -32,7 +32,4 @@ export class LightsComponent implements OnInit {
       error => { this.alertService.danger(error) }
     )
   }
-
-
-
 }

@@ -1,0 +1,21 @@
+<div *ngIf="light">
+  <h3>{{ light.name }}</h3>
+  <div *ngIf="light.state.reachable == false">
+    <i class="fa fa-5x fa-lightbulb-o" aria-hidden="true" style="color: red"></i>
+    Light not reachable
+  </div>
+  <div *ngIf="light.state.reachable == true">
+    <div *ngIf="light.state.on == false">
+      <i class="fa fa-5x fa-lightbulb-o" aria-hidden="true"></i>
+    </div>
+    <div *ngIf="light.state.on == true">
+      <i class="fa fa-5x fa-lightbulb-o" aria-hidden="true" style="color: yellow"></i>
+    </div>
+
+    <div>
+      <input #brightness type="range" name="bri" min="0" max="254" value="{{ light.state.bri }}" (mouseup)="changeBri(brightness.value)" />
+      <p>{{ light.state.bri }}</p>
+      {{ light.type }}
+      {{ light.modelid }}
+    </div>
+</div>
