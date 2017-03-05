@@ -11,10 +11,15 @@ interface State {
 }
 
 interface Light {
-  id: number
   name: string
   state?: State
   expanded?: boolean
+}
+
+interface Group {
+  name: string
+  type: string
+  lights: [string, Light]
 }
 
 @Component({
@@ -23,7 +28,8 @@ interface Light {
 
 export class LightsComponent implements OnInit {
   private endpoint: string
-  private lights: Light[] = []
+  private lights: {[key: string]: Light} = {}
+  private groups: [string, Group]
   private updating: boolean = false
 
   constructor(
@@ -35,27 +41,26 @@ export class LightsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.http.get(this.endpoint + '/lights')
-      .map((response: Response) => {
-        return response.json()
-      })
-      .subscribe(
-      data => {
-        Object.keys(data).forEach(i => {
-          let light = data[i]
-          light.id = i
-          if(light.state.on == false) {
-            light.state.bri = 0
-          }
-          this.lights.push(light)
-        })
-      },
-      error => { this.alertService.danger(error) }
-    )
+    this.getLights()
   }
 
-  trackBy(i, v) {
-    return i
+  getLights() {
+    this.http.get(`${this.endpoint}/lights`)
+      .subscribe(
+      (response: Response) => {
+        let data = response.json()
+        Object.keys(data).forEach(i => {
+          let light = data[i]
+          if(!light.state.on) {
+            light.state.bri = 0
+          }
+        })
+        this.lights = data
+      },
+      error => { 
+        this.alertService.danger(error) 
+      }
+    )
   }
 
   changeBrightness(index: number, value: number) {
@@ -70,9 +75,8 @@ export class LightsComponent implements OnInit {
 
     setTimeout(() => {
       let state: State = this.lights[index].state
-      let id: number = this.lights[index].id
 
-      this.http.put(`${this.endpoint}/lights/${id}/state`, JSON.stringify(state)) 
+      this.http.put(`${this.endpoint}/lights/${index}/state`, JSON.stringify(state)) 
         .map((response: Response) => {
           let data = response.json()
           if('error' in data) {
@@ -89,19 +93,26 @@ export class LightsComponent implements OnInit {
       350)
   }
 
-  lightStyle(state) {
-    if(state.reachable == false) {
+  lightStyle(state: State) {
+    if(!state.reachable) {
       return "#FF3333"
     }
-    if(state.on == true) {
+    if(state.on) {
       let bri = Math.floor(state.bri / 3) + 150
-      console.log(bri)
       return `rgb(${bri}, ${bri}, 100)`
     }
     return "rgb(80,80,80)"
   }
 
-  toggle(index: number) {
+  toggleOn(index: number) {
+    if(this.lights[index].state.on) {
+      this.changeBrightness(index, 0)
+    } else {
+      this.changeBrightness(index, 254)
+    }
+  }
+
+  toggleMenu(index: number) {
     this.lights[index].expanded = !this.lights[index].expanded
   }
 
@@ -110,7 +121,7 @@ export class LightsComponent implements OnInit {
     if(!name) {
       return
     }
-    this.http.put(`${this.endpoint}/lights/${this.lights[index].id}`, JSON.stringify({name: name}))
+    this.http.put(`${this.endpoint}/lights/${index}`, JSON.stringify({name: name}))
       .map((response: Response) => {
         let data = response.json()
         if('error' in data) {
@@ -132,7 +143,7 @@ export class LightsComponent implements OnInit {
     if(!confirm('Really remove this light?')) {
       return
     }
-    this.http.delete(`${this.endpoint}/lights/${this.lights[index].id}`)
+    this.http.delete(`${this.endpoint}/lights/${index}`)
       .map((response: Response) => {
         let data = response.json()
         if('error' in data) {
@@ -142,7 +153,7 @@ export class LightsComponent implements OnInit {
       .subscribe(
         () => {
           this.alertService.danger(`Removed light ${this.lights[index].name}`)
-          this.lights.splice(index, 1)
+          this.getLights()
         },
         error => {
           this.alertService.danger(error)

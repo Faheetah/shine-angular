@@ -24,7 +24,7 @@ html, body {
 }
 
 .fa-toggle-on, .fa-toggle-off {
-    color: #AAAAAA;
+    color: silver;
 }
 
 .slider {
@@ -43,6 +43,7 @@ html, body {
 }
 
 .card-header {
+    font-size: 24px;
     background-color: #222222;
     padding: 8px;
 }
@@ -59,6 +60,10 @@ html, body {
     color: #333333;
 }
 
+.disabled {
+    color: #AA3333;
+}
+
 
 input[type=range] {
   -webkit-appearance: none;
@@ -73,7 +78,7 @@ input[type=range]::-webkit-slider-runnable-track {
 }
 input[type=range]::-webkit-slider-thumb {
   border: 1px solid #000000;
-  margin: -1px;
+  margin: -1px 0 -1px 0;
   height: 36px;
   width: 36px;
   background: #DDDDDD;

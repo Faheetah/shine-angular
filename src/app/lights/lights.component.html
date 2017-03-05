@@ -1,35 +1,31 @@
-<div *ngFor="let light of lights; let i = index; trackBy:trackBy">
+<div *ngFor="let light of lights|keys">
   <div class="card">
     <div class="card-block">
-      <h4 class="card-header">
-        <span (click)="toggle(i)" class="pointer">
+      <div class="card-header">
+        <div class="pointer" (click)="toggleMenu(light.key)">
           <div class="fa-stack fa-lg">
             <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-lightbulb-o fa-stack-1x" [style.color]="lightStyle(light.state)"></i>
+            <i class="fa fa-lightbulb-o fa-stack-1x" [style.color]="lightStyle(light.value.state)"></i>
           </div>
-          {{ light.name }}
-        </span>
-        <div class="float-right" *ngIf="light.state.reachable == true">
-          <div *ngIf="light.state.on == false">
-            <i class="fa fa-2x fa-toggle-off pointer" (click)="changeBrightness(i, 254)"></i>
-          </div>
-          <div *ngIf="light.state.on == true">
-            <i class="fa fa-2x fa-toggle-on pointer" (click)="changeBrightness(i, 0)"></i>
-          </div>
+
+          {{ light.value.name }}
         </div>
-        <div class="float-right" *ngIf="light.state.reachable == false">
-          <i class="fa fa-2x fa-toggle-off red" style="color: #555555;"></i>
-        </div>
-      </h4>
-      <div *ngIf="light.expanded == true">
-        <div class="card-text">
-          <button (click)="rename(i)" class="btn btn-primary">Rename</button> 
-          <button (click)="delete(i)" class="btn btn-danger">Delete</button>
+
+        <div class="float-right" *ngIf="light.value.state.reachable">
+          <i class="fa fa-2x fa-toggle-on" (click)="toggleOn(light.key)" [ngClass]="!light.value.state.on && 'fa-rotate-180'"></i>
         </div>
       </div>
-      <div *ngIf="light.state.reachable == true">
+
+      <div *ngIf="light.value.expanded == true">
+        <div class="card-text">
+          <button (click)="rename(light.key)" class="btn btn-primary">Rename</button> 
+          <button (click)="delete(light.key)" class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+
+      <div *ngIf="light.value.state.reachable">
         <div class="card-footer slider">
-          <input max="254" type="range" [(ngModel)]="lights[i].state.bri" (ngModelChange)="changeBrightness(i, $event)" [style.background]="lightStyle(light.state)" />
+          <input max="254" type="range" [(ngModel)]="light.value.state.bri" (ngModelChange)="changeBrightness(light.key, $event)" [style.background]="lightStyle(light.value.state)" />
         </div>
       </div>
     </div>
