@@ -18,7 +18,6 @@ import { RoomsComponent } from './rooms/rooms.component';
 import { ScenesComponent } from './scenes/scenes.component';
 import { SchedulesComponent } from './schedules/schedules.component';
 import { KeysPipe } from './keys.pipe';
-import { LightDetailComponent } from './lights/light-detail.component';
 
 @NgModule({
   declarations: [
@@ -27,12 +26,10 @@ import { LightDetailComponent } from './lights/light-detail.component';
     HomeComponent,
     HubsComponent,
     LightsComponent,
-    LightDetailComponent,
     RoomsComponent,
     ScenesComponent,
     SchedulesComponent,
-    KeysPipe,
-    LightDetailComponent
+    KeysPipe
   ],
   imports: [
     BrowserModule,
