@@ -1,18 +1,13 @@
-  <div *ngFor="let light of lights; let i = index; trackBy:trackBy">
+<div *ngFor="let light of lights; let i = index; trackBy:trackBy">
   <div class="card">
     <div class="card-block">
       <h3 class="card-text">
-        <span class="fa-stack fa-lg">
+        <div class="fa-stack fa-lg">
           <i class="fa fa-circle fa-stack-2x"></i>
-          <div *ngIf="light.state.on == true">
-            <i class="fa fa-lightbulb-o fa-stack-1x" style="color: yellow;"></i>
-          </div>
-          <div *ngIf="light.state.on == false">
-            <i class="fa fa-lightbulb-o fa-stack-1x fa-inverse"></i>
-          </div>
-        </span>
+          <i class="fa fa-lightbulb-o fa-stack-1x" [style.color]="lightStyle(light.state)"></i>
+        </div>
         {{ light.name }}
-        <div class="float-right">
+        <div class="float-right" *ngIf="light.state.reachable == true">
           <div *ngIf="light.state.on == false">
             <i class="fa fa-2x fa-toggle-off pointer" (click)="changeBrightness(i, 254)"></i>
           </div>
@@ -20,10 +15,15 @@
             <i class="fa fa-2x fa-toggle-on pointer" (click)="changeBrightness(i, 0)"></i>
           </div>
         </div>
+        <div class="float-right" *ngIf="light.state.reachable == false">
+          <i class="fa fa-2x fa-toggle-off" style="color:silver"></i>
+        </div>
       </h3>
-      <div class="card-footer">
-        <input max="254" type="range" [(ngModel)]="lights[i].state.bri" (ngModelChange)="changeBrightness(i, $event)" />
-    </div>
+      <div *ngIf="light.state.reachable == true">
+        <div class="card-footer">
+          <input max="254" type="range" [(ngModel)]="lights[i].state.bri" (ngModelChange)="changeBrightness(i, $event)" />
+        </div>
+      </div>
     </div>
   </div>
 </div>
