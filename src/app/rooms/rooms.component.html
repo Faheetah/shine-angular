@@ -1,7 +1,32 @@
-<div *ngFor="let room of rooms|keys">
-  <h3>{{ room.value.name }}</h3>
-  id : {{ room.key }}
-  <div *ngFor="let r of room.value|keys">
-    {{ r.key }} : {{ r.value }}
+<div *ngFor="let group of groups|keys">
+  <div class="card">
+    <div class="card-block">
+      <div class="card-header">
+        <span class="pointer" (click)="toggleMenu(group.key)">
+          <div class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-lightbulb-o fa-stack-1x" [style.color]="lightStyle(group.value.action)"></i>
+          </div>
+
+          {{ group.value.name }}
+        </span>
+
+        <div class="float-right">
+          <i class="fa fa-2x fa-toggle-on" (click)="toggleOn(group.key)" [ngClass]="!group.value.action.on && 'fa-rotate-180'"></i>
+        </div>
+      </div>
+
+      <div *ngIf="group.value.expanded == true">
+        <div *ngFor="let light of group.value.lights|keys">
+          <div class="card-text">
+            {{ light.value.name }}
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer slider">
+        <input max="254" type="range" [(ngModel)]="group.value.action.bri" (ngModelChange)="changeBrightness(group.key, $event)" [style.background]="lightStyle(group.value.action)" />
+      </div>
+    </div>
   </div>
 </div>
