@@ -22,6 +22,7 @@ export class AlertService {
   }
 
   alert(message: string, type: string = 'warning') {
+    this.clear()
     this.subject.next({type: type, message: message});
   }
 
