@@ -17,3 +17,20 @@
     background-color: #025aa5 !important;
     border-color: #01549b !important;
 }
+
+.slider {
+    background: #333333;
+    color: #FFFFFF;
+    border-color: #555555;
+    border: 1px solid;
+    float: left;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+input[type=range] {
+    cursor: pointer;
+    width: 100%;
+}
