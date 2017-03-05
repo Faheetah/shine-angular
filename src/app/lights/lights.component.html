@@ -2,14 +2,14 @@
   <div class="card">
     <div class="card-block">
       <div class="card-header">
-        <div class="pointer" (click)="toggleMenu(light.key)">
+        <span class="pointer" (click)="toggleMenu(light.key)">
           <div class="fa-stack fa-lg">
             <i class="fa fa-circle fa-stack-2x"></i>
             <i class="fa fa-lightbulb-o fa-stack-1x" [style.color]="lightStyle(light.value.state)"></i>
           </div>
 
           {{ light.value.name }}
-        </div>
+        </span>
 
         <div class="float-right" *ngIf="light.value.state.reachable">
           <i class="fa fa-2x fa-toggle-on" (click)="toggleOn(light.key)" [ngClass]="!light.value.state.on && 'fa-rotate-180'"></i>
