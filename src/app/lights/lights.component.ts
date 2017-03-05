@@ -14,6 +14,7 @@ interface Light {
   id: number
   name: string
   state?: State
+  expanded?: boolean
 }
 
 @Component({
@@ -43,6 +44,9 @@ export class LightsComponent implements OnInit {
         Object.keys(data).forEach(i => {
           let light = data[i]
           light.id = i
+          if(light.state.on == false) {
+            light.state.bri = 0
+          }
           this.lights.push(light)
         })
       },
@@ -87,11 +91,60 @@ export class LightsComponent implements OnInit {
 
   lightStyle(state) {
     if(state.reachable == false) {
-      return "red"
+      return "#FF3333"
     }
     if(state.on == true) {
-      return "yellow"
+      return `rgb(${state.bri / 2 + 100}, ${state.bri / 2 + 100}, 100)`
     }
-    return "silver"
+    return "rgb(100,100,100)"
+  }
+
+  toggle(index: number) {
+    this.lights[index].expanded = !this.lights[index].expanded
+  }
+
+  rename(index: number) {
+    let name = prompt('New name:')
+    if(!name) {
+      return
+    }
+    this.http.put(`${this.endpoint}/lights/${this.lights[index].id}`, JSON.stringify({name: name}))
+      .map((response: Response) => {
+        let data = response.json()
+        if('error' in data) {
+          throw new Error(data.error)
+        }
+      })
+      .subscribe(
+        () => {
+          this.lights[index].name = name
+          this.lights[index].expanded = false
+        },
+        error => {
+          this.alertService.danger(error)
+        }
+      )
+  }
+
+  delete(index: number) {
+    if(!confirm('Really remove this light?')) {
+      return
+    }
+    this.http.delete(`${this.endpoint}/lights/${this.lights[index].id}`)
+      .map((response: Response) => {
+        let data = response.json()
+        if('error' in data) {
+          throw new Error(data.error)
+        }
+      })
+      .subscribe(
+        () => {
+          this.alertService.danger(`Removed light ${this.lights[index].name}`)
+          this.lights.splice(index, 1)
+        },
+        error => {
+          this.alertService.danger(error)
+        }
+      )
   }
 }
