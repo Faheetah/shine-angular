@@ -13,7 +13,7 @@
     </div>
 
     <div>
-      <input #brightness type="range" name="bri" min="0" max="254" value="{{ light.state.bri }}" (mouseup)="changeBri(brightness.value)" />
+      <input #brightness type="range" name="bri" min="0" max="254" value="{{ light.state.bri }}" (touchend)="changeBri(brightness.value)" (mouseup)="changeBri(brightness.value)" />
       <p>{{ light.state.bri }}</p>
       {{ light.type }}
       {{ light.modelid }}
