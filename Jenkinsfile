@@ -3,6 +3,7 @@ stage('build') {
         checkout scm
         sh 'npm install'
         sh 'npm run ng build'
-        sh 'mv dist /srv/shine/${BRANCH_NAME}'
+        sh "rsync -av --delete-after dist/ /srv/shine/${env.BRANCH_NAME}/"
+        echo "http://${env.BRANCH_NAME}.shine.sudovim.com"
     }
 }
