@@ -9,7 +9,7 @@ import { SchedulesComponent } from './schedules/schedules.component'
 import { HubsComponent } from './hubs/hubs.component'
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: LightsComponent },
   { path: 'lights', component: LightsComponent },
   { path: 'rooms', component: RoomsComponent },
   { path: 'scenes', component: ScenesComponent },
