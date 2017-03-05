@@ -19,6 +19,7 @@ interface State {
 export class LightDetailComponent implements OnInit {
   private endpoint: string;
   private light: any;
+  private loading: boolean;
 
   constructor(
     private http: Http,
@@ -31,10 +32,16 @@ export class LightDetailComponent implements OnInit {
   }
 
   changeBri(value: number) {
+    console.log(this.loading)
+    if(this.loading == true) {
+      return
+    }
+    this.loading = true;
     let on = value > 0 
     let payload: State = { on: on, bri: +value }
     this.http.put(this.endpoint + '/lights/' + this.light.id + '/state', JSON.stringify(payload))
       .map((response: Response) => {
+        console.log(response)
         return response.json()
       })
       .subscribe(
@@ -45,8 +52,13 @@ export class LightDetailComponent implements OnInit {
           this.light.state.on = on
           this.light.state.bri = value
         },
-        error => { this.alertService.danger(error) }
+        error => { 
+          this.alertService.danger(error) 
+        }
       )
+          setTimeout(() =>
+            this.loading = false
+          , 350);
   }
 
   getLight(id: string) {
