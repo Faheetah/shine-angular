@@ -39,6 +39,9 @@ export class LightDetailComponent implements OnInit {
       })
       .subscribe(
         data => {
+          if('error' in data) {
+            throw new Error(data.error)
+          }
           this.light.state.on = on
           this.light.state.bri = value
         },
