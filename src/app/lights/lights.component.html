@@ -29,7 +29,7 @@
       </div>
       <div *ngIf="light.state.reachable == true">
         <div class="card-footer slider">
-          <input max="254" type="range" [(ngModel)]="lights[i].state.bri" (ngModelChange)="changeBrightness(i, $event)" />
+          <input max="254" type="range" [(ngModel)]="lights[i].state.bri" (ngModelChange)="changeBrightness(i, $event)" [style.background]="lightStyle(light.state)" />
         </div>
       </div>
     </div>

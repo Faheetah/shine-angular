@@ -94,9 +94,11 @@ export class LightsComponent implements OnInit {
       return "#FF3333"
     }
     if(state.on == true) {
-      return `rgb(${state.bri / 2 + 100}, ${state.bri / 2 + 100}, 100)`
+      let bri = Math.floor(state.bri / 3) + 150
+      console.log(bri)
+      return `rgb(${bri}, ${bri}, 100)`
     }
-    return "rgb(100,100,100)"
+    return "rgb(80,80,80)"
   }
 
   toggle(index: number) {
