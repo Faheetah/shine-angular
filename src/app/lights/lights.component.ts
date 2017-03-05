@@ -7,6 +7,7 @@ import { AlertService } from '../alert.service';
 interface State {
   bri: number
   on?: boolean
+  reachable?: boolean
 }
 
 interface Light {
@@ -56,7 +57,8 @@ export class LightsComponent implements OnInit {
   changeBrightness(index: number, value: number) {
     this.lights[index].state = {
         on: +value > 0,
-        bri: +value
+        bri: +value,
+        reachable: this.lights[index].state.reachable
       }
     if(this.updating == true) { return }
 
@@ -74,12 +76,22 @@ export class LightsComponent implements OnInit {
           }
         })
         .subscribe(
-          data => {console.log(state)},
+          null,
           error => {
             this.alertService.danger(error)
           }
         )
       this.updating = false },
       350)
+  }
+
+  lightStyle(state) {
+    if(state.reachable == false) {
+      return "red"
+    }
+    if(state.on == true) {
+      return "yellow"
+    }
+    return "silver"
   }
 }

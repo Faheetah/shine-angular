@@ -18,4 +18,7 @@
       {{ light.type }}
       {{ light.modelid }}
     </div>
+  </div>
+  <div *ngIf="light.state.reachable == false">
+    <i class="fa fa-5x fa-light"
 </div>
