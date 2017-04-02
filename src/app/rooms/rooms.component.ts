@@ -128,7 +128,7 @@ export class RoomsComponent implements OnInit {
   }
 
   toggleOn(index: number) {
-    if(this.lights[index].state.on) {
+    if(this.groups[index]['action'].on) {
       this.changeBrightness(index, 0)
     } else {
       this.changeBrightness(index, 254)
