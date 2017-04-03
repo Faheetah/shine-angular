@@ -18,14 +18,17 @@
 
       <div *ngIf="group.value.expanded == true">
         <div class="card-text">
-          <button (click)="save(group.key)" class="btn btn-success">Save</button> 
-          <button (click)="rename(group.key)" class="btn btn-primary">Rename</button> 
-          <button (click)="delete(group.key)" class="btn btn-danger">Delete</button>
+          <button (click)="saveGroup(group.key)" class="btn btn-success">Save</button> 
+          <button (click)="renameGroup(group.key)" class="btn btn-primary">Rename</button> 
+          <button (click)="deleteGroup(group.key)" class="btn btn-danger">Delete</button>
         </div>
-        <div *ngFor="let light of lights|keys">
-          <div class="card-text">
-            <input type="checkbox" [checked]="group.value.lights.hasOwnProperty(light.key)" />
-            {{ light.value.name }}
+        <div class="card-text">
+          <div *ngFor="let light of lights|keys">
+            <label>
+              <input type="checkbox" [(ngModel)]="group.value.lights[light.key]" 
+                    (change)="$event.target.checked ? group.value.lights[light.key] = light.value : delete(group.value.lights, light.key)" /> 
+              {{ light.value.name }}
+            </label>
           </div>
         </div>
       </div>

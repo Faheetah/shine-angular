@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Http, Response } from '@angular/http';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { AuthService } from '../auth.service';
 import { AlertService } from '../alert.service';
@@ -146,7 +147,7 @@ export class RoomsComponent implements OnInit {
     }
   }
 
-  rename(index: number) {
+  renameGroup(index: number) {
     let name = prompt('New name:')
     if(!name) {
       return
@@ -169,7 +170,7 @@ export class RoomsComponent implements OnInit {
       )
   }
 
-  delete(index: number) {
+  deleteGroup(index: number) {
     if(!confirm('Really remove this group?')) {
       return
     }
@@ -189,5 +190,13 @@ export class RoomsComponent implements OnInit {
           this.alertService.danger(error)
         }
       )
+  }
+
+  saveGroup(index: string) {
+    console.log(this.groups[index].lights)
+  }
+
+  delete(obj: any, key: string) {
+    delete obj[key]
   }
 }
