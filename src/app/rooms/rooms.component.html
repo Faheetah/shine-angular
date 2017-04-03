@@ -17,8 +17,14 @@
       </div>
 
       <div *ngIf="group.value.expanded == true">
-        <div *ngFor="let light of group.value.lights|keys">
+        <div class="card-text">
+          <button (click)="save(group.key)" class="btn btn-success">Save</button> 
+          <button (click)="rename(group.key)" class="btn btn-primary">Rename</button> 
+          <button (click)="delete(group.key)" class="btn btn-danger">Delete</button>
+        </div>
+        <div *ngFor="let light of lights|keys">
           <div class="card-text">
+            <input type="checkbox" [checked]="group.value.lights.hasOwnProperty(light.key)" />
             {{ light.value.name }}
           </div>
         </div>

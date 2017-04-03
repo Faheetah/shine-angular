@@ -13,7 +13,6 @@ interface State {
 interface Light {
   name: string
   state?: State
-  expanded?: boolean
 }
 
 interface Group {
@@ -21,6 +20,7 @@ interface Group {
   type: string
   lights: [string, Light]
   action?: State
+  expanded?: boolean
 }
 
 @Component({
@@ -54,7 +54,7 @@ export class RoomsComponent implements OnInit {
         Object.keys(data).forEach(group => {
           let lights: {[key: string]: Light} = {}
           Object.keys(data[group].lights).forEach(light => {
-            lights[light] = this.lights[data[group].lights[light]]
+            lights[data[group].lights[light]] = this.lights[data[group].lights[light]]
           })
           data[group].lights = lights
           
@@ -63,7 +63,6 @@ export class RoomsComponent implements OnInit {
           }
         })
         this.groups = data
-        console.log(this.groups)
       },
       error => { 
         this.alertService.danger(error) 
@@ -136,7 +135,15 @@ export class RoomsComponent implements OnInit {
   }
 
   toggleMenu(index: number) {
-    this.lights[index].expanded = !this.lights[index].expanded
+    let expanded = this.groups[index]['expanded']
+
+    Object.keys(this.groups).forEach(g => {
+      this.groups[g]['expanded'] = false
+    })
+
+    if(!expanded) {
+      this.groups[index]['expanded'] = true
+    }
   }
 
   rename(index: number) {
@@ -144,7 +151,7 @@ export class RoomsComponent implements OnInit {
     if(!name) {
       return
     }
-    this.http.put(`${this.endpoint}/lights/${index}`, JSON.stringify({name: name}))
+    this.http.put(`${this.endpoint}/groups/${index}`, JSON.stringify({name: name}))
       .map((response: Response) => {
         let data = response.json()
         if('error' in data) {
@@ -153,8 +160,8 @@ export class RoomsComponent implements OnInit {
       })
       .subscribe(
         () => {
-          this.lights[index].name = name
-          this.lights[index].expanded = false
+          this.groups[index]['name'] = name
+          this.groups[index]['expanded'] = false
         },
         error => {
           this.alertService.danger(error)
@@ -163,10 +170,10 @@ export class RoomsComponent implements OnInit {
   }
 
   delete(index: number) {
-    if(!confirm('Really remove this light?')) {
+    if(!confirm('Really remove this group?')) {
       return
     }
-    this.http.delete(`${this.endpoint}/lights/${index}`)
+    this.http.delete(`${this.endpoint}/groups/${index}`)
       .map((response: Response) => {
         let data = response.json()
         if('error' in data) {
@@ -175,8 +182,8 @@ export class RoomsComponent implements OnInit {
       })
       .subscribe(
         () => {
-          this.alertService.danger(`Removed light ${this.lights[index].name}`)
-          this.getLights()
+          this.alertService.danger(`Removed group ${this.groups[index]['name']}`)
+          this.getGroups()
         },
         error => {
           this.alertService.danger(error)
