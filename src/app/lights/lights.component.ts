@@ -113,7 +113,15 @@ export class LightsComponent implements OnInit {
   }
 
   toggleMenu(index: number) {
-    this.lights[index].expanded = !this.lights[index].expanded
+    let expanded = this.lights[index]['expanded']
+
+    Object.keys(this.lights).forEach(l => {
+      this.lights[l]['expanded'] = false
+    })
+
+    if(!expanded) {
+      this.lights[index]['expanded'] = true
+    }
   }
 
   rename(index: number) {

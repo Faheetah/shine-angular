@@ -1,7 +1,51 @@
-<div *ngFor="let room of rooms|keys">
-  <h3>{{ room.value.name }}</h3>
-  id : {{ room.key }}
-  <div *ngFor="let r of room.value|keys">
-    {{ r.key }} : {{ r.value }}
+<div *ngFor="let group of groups|keys">
+  <div class="card">
+    <div class="card-block">
+      <div class="card-header">
+        <span class="pointer" (click)="toggleMenu(group.key)">
+          <div class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-lightbulb-o fa-stack-1x" [style.color]="lightStyle(group.value.action)"></i>
+          </div>
+
+          {{ group.value.name }}
+        </span>
+
+        <div class="float-right">
+          <i class="fa fa-2x fa-toggle-on" (click)="toggleOn(group.key)" [ngClass]="!group.value.action.on && 'fa-rotate-180'"></i>
+        </div>
+      </div>
+
+      <div *ngIf="group.value.expanded == true">
+        <div class="card-text">
+          <button (click)="saveGroup(group.key)" class="btn btn-success">Save</button> 
+          <button (click)="renameGroup(group.key)" class="btn btn-primary">Rename</button> 
+          <button (click)="deleteGroup(group.key)" class="btn btn-danger">Delete</button>
+        </div>
+        <div class="card-text">
+          <div *ngIf="group.value.type == 'Room'">
+            <label>Room Type: </label>
+            <select [(ngModel)]="group.value.class">
+              <option *ngFor="let c of classes" [ngValue]="c" >{{ c }}</option>
+            </select>
+          </div>
+          <p>Group Type: {{ group.value.type }}</p>
+        </div>
+        <div class="card-text">
+          <div *ngFor="let light of lights|keys">
+            <label>
+              <input type="checkbox" 
+                     [(ngModel)]="group.value.lights[light.key]" 
+                     (change)="$event.target.checked ? group.value.lights[light.key] = light.value : delete(group.value.lights, light.key)" /> 
+              {{ light.value.name }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer slider">
+        <input max="254" type="range" [(ngModel)]="group.value.action.bri" (ngModelChange)="changeBrightness(group.key, $event)" [style.background]="lightStyle(group.value.action)" />
+      </div>
+    </div>
   </div>
 </div>
