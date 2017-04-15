@@ -34,6 +34,28 @@ export class RoomsComponent implements OnInit {
   private groups: [string, Group]
   private updating: boolean = false
 
+  private classes: [string] = [
+    "Living room",
+    "Kitchen",
+    "Dining",
+    "Bedroom",
+    "Kids bedroom",
+    "Bathroom",
+    "Nursery",
+    "Recreation",
+    "Office",
+    "Gym",
+    "Hallway",
+    "Toilet",
+    "Front door",
+    "Garage",
+    "Terrace",
+    "Garden",
+    "Driveway",
+    "Carport",
+    "Other"
+  ]
+
   constructor(
     private http: Http,
     private alertService: AlertService,
@@ -54,6 +76,7 @@ export class RoomsComponent implements OnInit {
         let data = response.json()
         Object.keys(data).forEach(group => {
           let lights: {[key: string]: Light} = {}
+          // probably better to abstract this out into a method to get all lights for a group
           Object.keys(data[group].lights).forEach(light => {
             lights[data[group].lights[light]] = this.lights[data[group].lights[light]]
           })
@@ -192,8 +215,51 @@ export class RoomsComponent implements OnInit {
       )
   }
 
+  assignedToRoom(index: string) {
+    for(var g in this.groups) {
+      if(g == index || this.groups[g]['type'] != 'Room') {
+        continue
+      }
+
+      for(var l in this.groups[g]['lights']) {
+        if(l in this.groups[index]['lights']) {
+          this.alertService.danger(`Light "${this.lights[l]['name']}" is already in room "${this.groups[g]['name']}"`)
+          return true
+        }
+      }
+    }
+    return false
+  }
+
   saveGroup(index: string) {
-    console.log(this.groups[index].lights)
+    let group = {}
+    group['name'] = this.groups[index]['name']
+    group['class'] = this.groups[index]['class']
+    group['lights'] = Object.keys(this.groups[index]['lights'])
+
+    if(this.assignedToRoom(index)) {
+      return
+    }
+  
+    this.http.put(`${this.endpoint}/groups/${index}`, JSON.stringify(group))
+      .map((response: Response) => {
+        let data = response.json()
+        data.forEach(msg => {
+            if('error' in msg) {
+              throw new Error(msg['error']['description'])
+            }
+          }
+        )
+      })
+      .subscribe(
+        () => {
+          this.alertService.success(`Updated group ${this.groups[index]['name']}`)
+          this.getGroups()
+        },
+        error => {
+          this.alertService.danger(error)
+        }
+      )
   }
 
   delete(obj: any, key: string) {

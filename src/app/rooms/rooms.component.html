@@ -23,10 +23,20 @@
           <button (click)="deleteGroup(group.key)" class="btn btn-danger">Delete</button>
         </div>
         <div class="card-text">
+          <div *ngIf="group.value.type == 'Room'">
+            <label>Room Type: </label>
+            <select [(ngModel)]="group.value.class">
+              <option *ngFor="let c of classes" [ngValue]="c" >{{ c }}</option>
+            </select>
+          </div>
+          <p>Group Type: {{ group.value.type }}</p>
+        </div>
+        <div class="card-text">
           <div *ngFor="let light of lights|keys">
             <label>
-              <input type="checkbox" [(ngModel)]="group.value.lights[light.key]" 
-                    (change)="$event.target.checked ? group.value.lights[light.key] = light.value : delete(group.value.lights, light.key)" /> 
+              <input type="checkbox" 
+                     [(ngModel)]="group.value.lights[light.key]" 
+                     (change)="$event.target.checked ? group.value.lights[light.key] = light.value : delete(group.value.lights, light.key)" /> 
               {{ light.value.name }}
             </label>
           </div>
