@@ -168,4 +168,22 @@ export class LightsComponent implements OnInit {
         }
       )
   }
+
+  search() {
+    this.http.post(`${this.endpoint}/lights`, {})
+      .map((response: Response) => {
+        let data = response.json()
+        if('error' in data) {
+          throw new Error(data.error)
+        }
+      })
+      .subscribe(
+        () => {
+          this.alertService.info('Searching for new lights')
+        },
+        error => {
+          this.alertService.danger(error)
+        }
+      )
+  }
 }

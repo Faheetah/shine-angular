@@ -1,3 +1,7 @@
+<p>
+  <a href="#" (click)="search()">Search for New Lights</a> 
+</p>
+
 <div *ngFor="let light of lights|keys">
   <div class="card">
     <div class="card-block">
@@ -20,6 +24,9 @@
         <div class="card-text">
           <button (click)="rename(light.key)" class="btn btn-primary">Rename</button> 
           <button (click)="delete(light.key)" class="btn btn-danger">Delete</button>
+        </div>
+        <div class="card-text">
+          ID: {{ light.key }}
         </div>
       </div>
 
