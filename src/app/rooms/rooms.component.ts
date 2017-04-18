@@ -31,7 +31,8 @@ interface Group {
 export class RoomsComponent implements OnInit {
   private endpoint: string
   private lights: {[key: string]: Light} = {}
-  private groups: [string, Group]
+  private groups: [string, Group] 
+  private fuck: string = 'sd'
   private updating: boolean = false
 
   private classes: [string] = [
@@ -143,7 +144,7 @@ export class RoomsComponent implements OnInit {
   }
 
   lightStyle(state: State) {
-    if(state.on) {
+    if(state != undefined && state.on) {
       let bri = Math.floor(state.bri / 3) + 150
       return `rgb(${bri}, ${bri}, 100)`
     }
@@ -151,6 +152,10 @@ export class RoomsComponent implements OnInit {
   }
 
   toggleOn(index: number) {
+    if(!this.groups[index].hasOwnProperty('action')) {
+      return
+    }
+
     if(this.groups[index]['action'].on) {
       this.changeBrightness(index, 0)
     } else {
@@ -172,9 +177,11 @@ export class RoomsComponent implements OnInit {
 
   renameGroup(index: number) {
     let name = prompt('New name:')
+
     if(!name) {
       return
     }
+
     this.http.put(`${this.endpoint}/groups/${index}`, JSON.stringify({name: name}))
       .map((response: Response) => {
         let data = response.json()
@@ -197,6 +204,7 @@ export class RoomsComponent implements OnInit {
     if(!confirm('Really remove this group?')) {
       return
     }
+
     this.http.delete(`${this.endpoint}/groups/${index}`)
       .map((response: Response) => {
         let data = response.json()
@@ -260,6 +268,22 @@ export class RoomsComponent implements OnInit {
           this.alertService.danger(error)
         }
       )
+  }
+
+  newGroup() {
+    let name = prompt('Group name:')
+
+    if(!name) {
+      return
+    }
+
+    this.groups[name] = {
+      type: 'Room', 
+      name: name, 
+      class: 'Other', 
+      lights: []
+    }
+    console.log(this.groups)
   }
 
   delete(obj: any, key: string) {

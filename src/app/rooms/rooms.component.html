@@ -1,3 +1,7 @@
+<p>
+  <a href="#/rooms" (click)="newGroup()">New Group</a>
+</p>
+
 <div *ngFor="let group of groups|keys">
   <div class="card">
     <div class="card-block">
@@ -12,7 +16,7 @@
         </span>
 
         <div class="float-right">
-          <i class="fa fa-2x fa-toggle-on" (click)="toggleOn(group.key)" [ngClass]="!group.value.action.on && 'fa-rotate-180'"></i>
+          <i class="fa fa-2x fa-toggle-on" (click)="toggleOn(group.key)" [ngClass]="group.value.hasOwnProperty('action') && !group.value.action.on && 'fa-rotate-180'"></i>
         </div>
       </div>
 
@@ -25,13 +29,14 @@
         <div class="card-text">
           <div *ngIf="group.value.type == 'Room'">
             <label>Room Type: </label>
-            <select [(ngModel)]="group.value.class">
-              <option *ngFor="let c of classes" [ngValue]="c" >{{ c }}</option>
-            </select>
+            <input [(ngModel)]="fuck" />
+            <!--<select [(ngModel)]="group.value.class">-->
+              <!--<option *ngFor="let c of classes" [ngValue]="c" >{{ c }}</option>-->
+            <!--</select>-->
           </div>
           <p>Group Type: {{ group.value.type }}</p>
         </div>
-        <div class="card-text">
+        <!--<div class="card-text">
           <div *ngFor="let light of lights|keys">
             <label>
               <input type="checkbox" 
@@ -40,10 +45,10 @@
               {{ light.value.name }}
             </label>
           </div>
-        </div>
+        </div>-->
       </div>
 
-      <div class="card-footer slider">
+      <div *ngIf="group.value.hasOwnProperty('action')" class="card-footer slider">
         <input max="254" type="range" [(ngModel)]="group.value.action.bri" (ngModelChange)="changeBrightness(group.key, $event)" [style.background]="lightStyle(group.value.action)" />
       </div>
     </div>
