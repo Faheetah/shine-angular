@@ -2,6 +2,15 @@
   <h3>{{ schedule.value.name }}</h3>
   id : {{ schedule.key }}
   <div *ngFor="let item of schedule.value|keys">
-    {{ item.key }} : {{ item.value }}
+    <div *ngIf="item.key != 'command'">
+      {{ item.key }} : {{ item.value }}
+    </div>
+  </div>
+  <h4>Commands</h4>
+  <div>Address: {{ schedule.value.command.address }}</div>
+  <div>Method: {{ schedule.value.command.method }}</div>
+  <div>Body:</div>
+  <div *ngFor="let command of schedule.value.command.body|keys">
+    <div>{{ command.key }} : {{ command.value }}</div>
   </div>
 </div>

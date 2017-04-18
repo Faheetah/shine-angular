@@ -1,6 +1,23 @@
 <div *ngFor="let scene of scenes|keys">
   <h3>{{ scene.value.name }}</h3>
+  <button (click)="saveScene(scene.key)" class="btn btn-success">Save</button> 
+  <div *ngIf='!scene.value.locked'>
+    <button (click)="deleteScene(scene.key)" class="btn btn-danger">Delete</button>
+  </div>
+  <div class="card-text">
+  <div *ngFor="let light of lights|keys">
+    <label>
+      <input type="checkbox" 
+              [(ngModel)]="scene.value.lights[light.key]" 
+              (change)="$event.target.checked ? scene.value.lights[light.key] = light.value : delete(scene.value.lights, light.key)" /> 
+      {{ light.value.name }}
+    </label>
+  </div>
   <div *ngFor="let s of scene.value|keys">
+    {{ s.key }} : {{ s.value }}
+  </div>
+  <h4>appdata</h4>
+  <div *ngFor="let s of scene.value['appdata']|keys">
     {{ s.key }} : {{ s.value }}
   </div>
 </div>
