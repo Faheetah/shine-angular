@@ -26,11 +26,14 @@ export class HubsComponent implements OnInit {
       .subscribe(
         data => {
           this.hubs = data.json();
+          if(this.hubs.length === 1) {
+            this.login(this.hubs[0].id, this.hubs[0].internalipaddress);
+          }
           this.loading = false;
           this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
         },
         error => {
-          this.alertService.danger(error) 
+          this.alertService.danger('Could not get hub from Philips, please visit https://www.meethue.com/api/nupnp to get your hub IP, or check your router.')
           this.loading = false;
         }
       ) 
@@ -45,6 +48,7 @@ export class HubsComponent implements OnInit {
           this.router.navigate([this.returnUrl]);
         },
         error => {
+          console.log(111)
           this.alertService.danger(error) 
         }
       )
