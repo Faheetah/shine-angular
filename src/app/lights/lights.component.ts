@@ -5,21 +5,22 @@ import { AuthService } from '../auth.service';
 import { AlertService } from '../alert.service';
 
 interface State {
-  bri: number
-  on?: boolean
-  reachable?: boolean
+  bri: number;
+  on?: boolean;
+  reachable?: boolean;
 }
 
 interface Light {
-  name: string
-  state?: State
-  expanded?: boolean
+  id: number;
+  name: string;
+  state?: State;
+  expanded?: boolean;
 }
 
 interface Group {
-  name: string
-  type: string
-  lights: [string, Light]
+  name: string;
+  type: string;
+  lights: [string, Light];
 }
 
 @Component({
@@ -27,163 +28,164 @@ interface Group {
 })
 
 export class LightsComponent implements OnInit {
-  private endpoint: string
-  private lights: {[key: string]: Light} = {}
-  private groups: [string, Group]
-  private updating: boolean = false
+  private endpoint: string;
+  private lights: Light[] = [];
+  private groups: [string, Group];
+  private updating: boolean = false;
 
   constructor(
     private http: Http,
     private alertService: AlertService,
     private authService: AuthService
-  ) { 
+  ) {
     this.endpoint = authService.getEndpoint();
   }
 
   ngOnInit() {
-    this.getLights()
+    this.getLights();
   }
 
   getLights() {
     this.http.get(`${this.endpoint}/lights`)
       .subscribe(
       (response: Response) => {
-        let data = response.json()
+        const data = response.json();
         Object.keys(data).forEach(i => {
-          let light = data[i]
-          if(!light.state.on) {
-            light.state.bri = 0
+          const light = data[i];
+          if (!light.state.on) {
+            light.state.bri = 0;
           }
-        })
-        this.lights = data
+          light.id = i;
+          this.lights.push(light);
+        });
       },
-      error => { 
-        this.alertService.danger(error) 
+      error => {
+        this.alertService.danger(error);
       }
-    )
+    );
   }
 
-  changeBrightness(index: number, value: number) {
-    this.lights[index].state = {
+  changeBrightness(light: Light, value: number) {
+    light.state = {
         on: +value > 0,
         bri: +value,
-        reachable: this.lights[index].state.reachable
-      }
-    if(this.updating == true) { return }
+        reachable: light.state.reachable
+      };
+    if (this.updating === true) { return; }
 
-    this.updating = true
+    this.updating = true;
 
     setTimeout(() => {
-      let state: State = this.lights[index].state
+      const state: State = light.state;
 
-      this.http.put(`${this.endpoint}/lights/${index}/state`, JSON.stringify(state)) 
+      this.http.put(`${this.endpoint}/lights/${light.id}/state`, JSON.stringify(state))
         .map((response: Response) => {
-          let data = response.json()
-          if('error' in data) {
-            throw new Error(data.error)
+          const data = response.json();
+          if ('error' in data) {
+            throw new Error(data.error);
           }
         })
         .subscribe(
           null,
           error => {
-            this.alertService.danger(error)
+            this.alertService.danger(error);
           }
-        )
-      this.updating = false },
-      350)
+        );
+      this.updating = false; },
+      350);
   }
 
   lightStyle(state: State) {
-    if(!state.reachable) {
-      return "#FF3333"
+    if (!state.reachable) {
+      return '#FF3333';
     }
-    if(state.on) {
-      let bri = Math.floor(state.bri / 3) + 150
-      return `rgb(${bri}, ${bri}, 100)`
+    if (state.on) {
+      const bri = Math.floor(state.bri / 3) + 150;
+      return `rgb(${bri}, ${bri}, 100)`;
     }
-    return "rgb(80,80,80)"
+    return 'rgb(80,80,80)';
   }
 
-  toggleOn(index: number) {
-    if(this.lights[index].state.on) {
-      this.changeBrightness(index, 0)
+  toggleOn(light: Light) {
+    if (light.state.on) {
+      this.changeBrightness(light, 0);
     } else {
-      this.changeBrightness(index, 254)
+      this.changeBrightness(light, 254);
     }
   }
 
-  toggleMenu(index: number) {
-    let expanded = this.lights[index]['expanded']
+  toggleMenu(light: Light) {
+    const expanded = light['expanded']; //this.lights[index]['expanded'];
 
     Object.keys(this.lights).forEach(l => {
-      this.lights[l]['expanded'] = false
-    })
+      this.lights[l]['expanded'] = false;
+    });
 
-    if(!expanded) {
-      this.lights[index]['expanded'] = true
+    if (!expanded) {
+      light['expanded'] = true;
     }
   }
 
-  rename(index: number) {
-    let name = prompt('New name:')
-    if(!name) {
-      return
+  rename(light: Light) {
+    const name = prompt('New name:');
+    if (!name) {
+      return;
     }
-    this.http.put(`${this.endpoint}/lights/${index}`, JSON.stringify({name: name}))
+    this.http.put(`${this.endpoint}/lights/${light.id}`, JSON.stringify({name: name}))
       .map((response: Response) => {
-        let data = response.json()
-        if('error' in data) {
-          throw new Error(data.error)
+        const data = response.json();
+        if ('error' in data) {
+          throw new Error(data.error);
         }
       })
       .subscribe(
         () => {
-          this.lights[index].name = name
-          this.lights[index].expanded = false
+          light.name = name;
+          light.expanded = false;
         },
         error => {
-          this.alertService.danger(error)
+          this.alertService.danger(error);
         }
-      )
+      );
   }
 
-  delete(index: number) {
-    if(!confirm('Really remove this light?')) {
-      return
+  delete(light: Light) {
+    if (!confirm('Really remove this light?')) {
+      return;
     }
-    this.http.delete(`${this.endpoint}/lights/${index}`)
+    this.http.delete(`${this.endpoint}/lights/${light.id}`)
       .map((response: Response) => {
-        let data = response.json()
-        if('error' in data) {
-          throw new Error(data.error)
+        const data = response.json();
+        if ('error' in data) {
+          throw new Error(data.error);
         }
       })
       .subscribe(
         () => {
-          this.alertService.danger(`Removed light ${this.lights[index].name}`)
-          this.getLights()
+          this.alertService.danger(`Removed light ${light.name}`);
+          this.getLights();
         },
         error => {
-          this.alertService.danger(error)
+          this.alertService.danger(error);
         }
-      )
+      );
   }
 
   search() {
     this.http.post(`${this.endpoint}/lights`, {})
       .map((response: Response) => {
-        let data = response.json()
-        if('error' in data) {
-          throw new Error(data.error)
+        const data = response.json();
+        if ('error' in data) {
+          throw new Error(data.error);
         }
       })
       .subscribe(
         () => {
-          this.alertService.info('Searching for new lights')
+          this.alertService.info('Searching for new lights');
         },
         error => {
-          this.alertService.danger(error)
+          this.alertService.danger(error);
         }
-      )
+      );
   }
 }
